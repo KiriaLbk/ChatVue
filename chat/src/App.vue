@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <Setting></Setting>
-    <View></View>
-    <Chat></Chat>
+    <View @alt="alt"></View>
+    <Chat :data="info"></Chat>
   </div>
 </template>
 
@@ -17,6 +17,16 @@ export default {
     View,
     Chat,
     Setting
+  },
+  data() {
+      return {
+          info: ''
+      }
+  },
+  methods: {
+    alt(elem) {
+      this.info = elem;
+    }
   }
 }
 </script>

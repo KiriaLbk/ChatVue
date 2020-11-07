@@ -9,7 +9,7 @@
       </div>
       <div class="messages" ref="messages">
           <div ref="messageContainer" class="container">
-          <div class="message__user" :class="{'userStyle': item.fromuser === 'Alma Llogd', 'guestStyle': item.fromuser !== 'Alma Llogd'}" v-for="(item, index) in arr" :key="item.id">
+          <div class="message__user" :class="{'userStyle': item.fromuser === 'Alma Llogd', 'guestStyle': item.fromuser !== 'Alma Llogd'}" v-for="(item, index) in changedArr" :key="item.id">
               <div class="span">
                 <div v-if="arrIcons.includes(index)" :class="{'reverseFlex': item.fromuser !== 'Alma Llogd'}" class="image__user">
                     <span>{{item.fromuser}}</span>
@@ -38,6 +38,20 @@
 
 export default {
   name: 'Chat',
+  data() {
+    return {
+      altName: 'Adam Malone',
+      userMess: {
+          img: 'image.png',
+          mess: '',
+          fromuser: 'Alma Llogd'
+      },
+      arr: [],
+      changedArr: [],
+      arrIcons: [0]
+    }
+  },
+  props: ['data'],
   updated() {
       this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
   },
@@ -46,29 +60,13 @@ export default {
     .then(response => response.json())
     .then(data => {this.arr = data});
   },
-  data() {
-    return {
-      userMess: {
-          img: 'image.png',
-          mess: '',
-          fromuser: 'Alma Llogd',
-          touser: 'Katie Grane'
-      },
-      arr: [],
-      arrIcons: [0]
-    }
-  },
   watch: {
+      data() {
+          this.altName = this.data;
+          this.changeMess();
+      },
       arr(){
-        this.arrIcons=[0];
-        this.arr.forEach((elem, ind, arr) => {
-            if(ind !== arr.length-1) {
-                if (arr[ind].fromuser !== arr[ind+1].fromuser) {
-                    this.arrIcons.push(ind+1);
-                }
-            }
-        })
-          return this;
+          this.changeMess();
       }
   },
   methods: {
@@ -89,7 +87,7 @@ export default {
                 img: this.userMess.img,
                 mess: this.userMess.mess,
                 fromuser: this.userMess.fromuser,
-                touser: this.userMess.touser
+                touser: this.altName
             })
         };
       fetch("http://localhost:3000/message", requestOptions);
@@ -97,9 +95,23 @@ export default {
       getRequest() {
           fetch("http://localhost:3000/message")
           .then(response => response.json())
-        .then(data => {this.arr = data});
-      }
-  }
+          .then(data => {this.arr = data});
+      },
+      changeMess() {
+          this.changedArr = (this.altName === this.userMess.fromuser) ? this.arr.filter((el) => el.touser === this.altName && el.fromuser === this.altName)
+          : this.arr.filter((el) => el.touser === this.altName || el.fromuser === this.altName);
+          if(this.changedArr.length !== 0) {
+            this.arrIcons=[0];
+            this.changedArr.forEach((elem, ind, arr) => {
+                if(ind !== arr.length-1) {
+                    if (arr[ind].fromuser !== arr[ind+1].fromuser) {
+                        this.arrIcons.push(ind+1);
+                    }
+                }
+            })
+          }
+        }
+    }
 }
 </script>
 

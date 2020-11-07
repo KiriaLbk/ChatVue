@@ -15,9 +15,6 @@
 
 export default {
   name: 'Setting',
-  components: {
-
-  }
 }
 </script>
 

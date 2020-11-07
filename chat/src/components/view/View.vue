@@ -15,12 +15,12 @@
         </div>
     </div>
     <div class="user">
-        <img src="../../assets/image.png" alt="Alma Llogd">
-        <img src="../../assets/image1.png" alt="Marvin Lambert">
-        <img src="../../assets/image2.png" alt="Katie Grane">
-        <img src="../../assets/image3.png" alt="Brian Adam">
-        <img src="../../assets/image6.png" alt="Nora Barnett">
-        <img src="../../assets/image7.png" alt="Adam Malone">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image.png" alt="Alma Llogd">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image1.png" alt="Marvin Lambert">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image2.png" alt="Katie Grane">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image3.png" alt="Brian Adam">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image6.png" alt="Nora Barnett">
+        <img @click="getAlt($event.target.alt)" src="../../assets/image7.png" alt="Adam Malone">
     </div>
     <div class="view__settings">
         <div class="sound">
@@ -54,7 +54,17 @@
 <script>
 
 export default {
-  name: 'View'
+  name: 'View',
+  date() {
+      return {
+          alt: ''
+      }
+  },
+  methods: {
+      getAlt(elem) {
+          this.$emit('alt', elem);
+      }
+  }
 }
 </script>
 
